@@ -104,6 +104,7 @@ impl EventHandler for App {
 
         let speed = 5.0;
         let turn_speed = 0.05;
+        let old_camera = self.camera;
 
         if self.top_down_view {
             // Move x and y normally
@@ -139,6 +140,13 @@ impl EventHandler for App {
             if y != 0.0 {
                 self.camera.x += y * speed * self.direction.cos();
                 self.camera.y += y * speed * self.direction.sin();
+            }
+        }
+
+        for (rect, _) in &self.rects {
+            if is_point_in_rect(self.camera, rect) {
+                self.camera = old_camera;
+                break;
             }
         }
 
